@@ -1,5 +1,5 @@
 import requests
-from response_validator import validate
+from validators.validator import Validator
 
 
 def run_scenario(scenario: dict, spec: dict) -> dict:
@@ -19,7 +19,8 @@ def run_step(step_obj: dict, spec: dict, headers: dict=None) -> dict:
     else:
         raise NotImplementedError(f"Operation not implemented: {operation}")
 
-    return validate(
+    return Validator.validate(
+        {"path": step_obj['path'], "operation": operation, "headers": headers},
         {"status": response.status_code, "body": response.json(), "headers": response.headers},
         step_obj['expected'],
         spec
