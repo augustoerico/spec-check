@@ -1,8 +1,8 @@
 import re
 
-from exceptions import PathNotFound, OperationObjNotFound, ResponseObjNotFound, MediaTypeObjNotFound, \
+from speccheck.exceptions import PathNotFound, OperationObjNotFound, ResponseObjNotFound, MediaTypeObjNotFound, \
     SchemaObjNotFound
-from validators.json_schema_validator import JsonSchemaValidator
+from speccheck.validators.json_schema_validator import JsonSchemaValidator
 
 
 class SpecValidator:
@@ -50,7 +50,7 @@ class SpecValidator:
     @classmethod
     def get_matching_path(cls, path: str, template_paths: list) -> str:
         for p in template_paths:
-            pattern = p.replaceAll('{\\w+}', r'\w+').replaceAll('/', r'\/')
+            pattern = p.replace('{\\w+}', r'\w+').replace('/', r'\/')
             if re.match(pattern, path):
                 return path
         return ''

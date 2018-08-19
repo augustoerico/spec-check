@@ -1,5 +1,5 @@
-from validators.result_validator import ResultValidator
-from validators.spec_validator import SpecValidator
+from speccheck.validators.result_validator import ResultValidator
+from speccheck.validators.spec_validator import SpecValidator
 
 
 class Validator:

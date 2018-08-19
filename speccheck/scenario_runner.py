@@ -3,19 +3,25 @@ import os
 import requests
 import yaml
 
-from validators.validator import Validator
+from speccheck.spec_parser import SpecParser
+from speccheck.validators.validator import Validator
 
 
 class ScenarioRunner:
 
     @classmethod
-    def run(cls, collection_path: str, spec_ref: str) -> dict:
-        return cls.run_all(cls.parse_scenarios(collection_path), yaml.load(spec_ref))
+    def run(cls, collection_path: str, spec_path: str) -> dict:
+        return cls.run_all(
+            cls.parse_scenarios(collection_path),
+            SpecParser.parse(spec_path)
+        )
 
     @classmethod
     def parse_scenarios(cls, collection_path: str) -> list:
         return [
-            yaml.load(f)
+            yaml.load(
+                open(os.path.join(collection_path, f), 'r').read()
+            )
             for f in os.listdir(collection_path)
             if f.endswith('.yml') or f.endswith('.yaml')
         ]
@@ -31,7 +37,7 @@ class ScenarioRunner:
     def run_scenario(cls, scenario: dict, spec: dict) -> dict:
         return {"steps_results": [
             cls.run_step(scenario['steps'][step], spec, scenario['headers'])
-            for step in scenario['execution']
+            for step in scenario['steps']
         ]}
 
     @classmethod
@@ -48,7 +54,7 @@ class ScenarioRunner:
         request = {"path": step_obj['path'], "operation": operation, "headers": headers}
         response = {
             "status": response.status_code,
-            "body": response.json(),
+            # "body": response.json(),
             "headers": {k.lower(): v.lower() for k, v in response.headers.items()}
         }
 
