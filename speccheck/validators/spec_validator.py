@@ -50,9 +50,10 @@ class SpecValidator:
     @classmethod
     def get_matching_path(cls, path: str, template_paths: list) -> str:
         for p in template_paths:
-            pattern = p.replace('{\\w+}', r'\w+').replace('/', r'\/')
+            pattern = re.sub(r'{\w+}', r'\w+', p)
+            pattern = f'^{pattern}$'
             if re.match(pattern, path):
-                return path
+                return p
         return ''
 
     @classmethod
