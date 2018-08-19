@@ -1,0 +1,3 @@
+jsonschema==3.0.0a3.dev40+g72fd484
+PyYAML==3.13
+requests==2.19.1
