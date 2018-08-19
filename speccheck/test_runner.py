@@ -19,9 +19,11 @@ def run_step(step_obj: dict, spec: dict, headers: dict=None) -> dict:
     else:
         raise NotImplementedError(f"Operation not implemented: {operation}")
 
-    return Validator.validate(
-        {"path": step_obj['path'], "operation": operation, "headers": headers},
-        {"status": response.status_code, "body": response.json(), "headers": response.headers},
-        step_obj['expected'],
-        spec
-    )
+    request = {"path": step_obj['path'], "operation": operation, "headers": headers}
+    response = {
+        "status": response.status_code,
+        "body": response.json(),
+        "headers": {k.lower(): v.lower() for k, v in response.headers.items()}
+    }
+
+    return Validator.validate(request, response, step_obj['expected'], spec)

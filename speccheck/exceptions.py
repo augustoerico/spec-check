@@ -4,13 +4,25 @@ class PathNotFound(Exception):
         super().__init__(self)
 
 
-class OperationNotFound(Exception):
+class OperationObjNotFound(Exception):
 
     def __init__(self):
         super().__init__(self)
 
 
-class StatusNotFound(Exception):
+class ResponseObjNotFound(Exception):
+
+    def __init__(self):
+        super().__init__(self)
+
+
+class MediaTypeObjNotFound(Exception):
+
+    def __init__(self):
+        super().__init__(self)
+
+
+class SchemaObjNotFound(Exception):
 
     def __init__(self):
         super().__init__(self)
