@@ -17,12 +17,26 @@ class SpecValidator:
         https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.1.md#oasObject
         :return:
         """
-        operation_spec = cls.get_operation_spec(request, spec)
+
+        errors = []
+        try:
+            response = cls.validate_response(
+                response,
+                cls.get_operation_spec(request, spec)
+            )
+        except (PathNotFound, OperationObjNotFound, ResponseObjNotFound, MediaTypeObjNotFound, SchemaObjNotFound) as e:
+            valid = False
+            errors = [{"message": type(e)}]
+        except ValueError as e:
+            valid = False
+            errors = [{"message": type(e)}]
+        else:
+            valid = True
 
         return {
-            "status": "",
-            "request": "",
-            "response": cls.validate_response(response, operation_spec)
+            "valid": valid,
+            "errors": errors,
+            "response": response
         }
 
     @classmethod
