@@ -6,6 +6,7 @@ import yaml
 from speccheck.spec_parser import SpecParser
 from speccheck.validators.validator import Validator
 
+from json import JSONDecodeError
 
 class ScenarioRunner:
 
@@ -52,10 +53,18 @@ class ScenarioRunner:
             raise NotImplementedError(f"Operation not implemented: {operation}")
 
         request = {"path": step_obj['path'], "operation": operation, "headers": headers}
+
+        try:
+            body = response.json()
+        except JSONDecodeError:
+            body = {}
+
         response = {
             "status": response.status_code,
-            # "body": response.json(),
+            "body": body,
             "headers": {k.lower(): v.lower() for k, v in response.headers.items()}
         }
+
+        print(response)
 
         return Validator.validate(request, response, step_obj['expected'], spec)

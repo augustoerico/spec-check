@@ -31,7 +31,7 @@ class SpecValidator:
             valid = False
             errors = [{"message": type(e)}]
         else:
-            valid = True
+            valid = response['valid']
 
         return {
             "valid": valid,
@@ -91,14 +91,14 @@ class SpecValidator:
         if not response_obj:
             raise ResponseObjNotFound()
 
-        content = responses_obj.get('content')
+        content = response_obj.get('content')
         if not content:
             return {"valid": True}
 
         # TODO it needs further investigation to handle headers
         media_type = test_response['headers'].get('content-type')
         # TODO for now, only evaluating the application/json content-type
-        if media_type != 'content-type':
+        if media_type != 'application/json':
             raise NotImplementedError(f'Media type not supported: {media_type}')
 
         media_type_obj = content.get(media_type or '')

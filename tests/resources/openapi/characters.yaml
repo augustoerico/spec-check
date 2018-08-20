@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+    title: "Characters API Specification"
+    version: "0.1.0"
+
+servers:
+    - url: https://some-cloud-provider.com/dev
+      description: Dev
+
+paths:
+    /characters:
+        get:
+            description: List characters
+            operationId: CharacterList
+            summary: List
+            responses:
+                '200':
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CharacterList"
+    /characters/{id}:
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                  type: string
+        get:
+            operationId: CharacterGet
+            summary: Get
+            responses:
+                '200':
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/CharacterGet"
+                '404':
+                    description: Not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/404"
+
+components:
+    schemas:
+        CharacterGet:
+            type: object
+            required:
+                - id
+                - name
+            properties:
+                id:
+                    type: string
+                    minLength: 1
+                name:
+                    type: string
+                    minLength: 1
+                    maxLength: 128
+                age:
+                    type: number
+                    minimum: 0
+
+        CharacterList:
+            type: object
+            required:
+                - data
+            properties:
+                data:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/CharacterGet"
+
+        4XX:
+            required:
+                - errors
+            properties:
+                errors:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+        400:
+            $ref: '#/components/schemas/4XX'
+        401:
+            $ref: '#/components/schemas/4XX'
+        404:
+            $ref: '#/components/schemas/4XX'
