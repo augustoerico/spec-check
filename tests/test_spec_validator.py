@@ -19,7 +19,6 @@ def test_spec_response_not_valid_for_mismatching_schema():
 
     # when
     result = SpecValidator.validate(request, response, spec)
-    print(result)
 
     # then
     assert result['valid'] is False

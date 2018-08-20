@@ -8,6 +8,7 @@ from speccheck.validators.validator import Validator
 
 from json import JSONDecodeError
 
+
 class ScenarioRunner:
 
     @classmethod
@@ -64,7 +65,5 @@ class ScenarioRunner:
             "body": body,
             "headers": {k.lower(): v.lower() for k, v in response.headers.items()}
         }
-
-        print(response)
 
         return Validator.validate(request, response, step_obj['expected'], spec)
